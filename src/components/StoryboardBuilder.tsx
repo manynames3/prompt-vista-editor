@@ -195,6 +195,17 @@ export function StoryboardBuilder() {
         )}
       </div>
 
+      {/* Timeline */}
+      {scenes.length > 0 && (
+        <StoryboardTimeline
+          scenes={scenes}
+          activeSceneId={[...expandedScenes][0]}
+          onSceneClick={(id) => {
+            setExpandedScenes(new Set([id]));
+          }}
+        />
+      )}
+
       {/* Scenes */}
       <div className="space-y-2">
         {scenes.map((scene, index) => {
