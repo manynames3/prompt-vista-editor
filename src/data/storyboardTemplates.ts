@@ -310,4 +310,5 @@ export interface StoryboardScene {
   endFrame: string;
   motion: string;
   duration: string;
+  notes: string;
 }
