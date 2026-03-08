@@ -109,11 +109,11 @@ const Index = () => {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   {PROMPT_CATEGORIES
                     .filter((cat) => !cat.platformOnly || cat.platformOnly === platform)
                     .map((cat) => (
-                    <div key={cat.id} className={cat.halfWidth ? "" : "md:col-span-2"}>
+                    <div key={cat.id} className={cat.halfWidth ? "" : "col-span-2"}>
                       <PromptSection
                         category={cat}
                         isSelected={isSelected}
