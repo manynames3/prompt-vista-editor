@@ -109,17 +109,20 @@ const Index = () => {
                   </div>
                 )}
 
-                {PROMPT_CATEGORIES
-                  .filter((cat) => !cat.platformOnly || cat.platformOnly === platform)
-                  .map((cat) => (
-                  <PromptSection
-                    key={cat.id}
-                    category={cat}
-                    isSelected={isSelected}
-                    toggleOption={toggleOption}
-                    selectedCount={(selections[cat.id] || []).length}
-                  />
-                ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {PROMPT_CATEGORIES
+                    .filter((cat) => !cat.platformOnly || cat.platformOnly === platform)
+                    .map((cat) => (
+                    <div key={cat.id} className={cat.halfWidth ? "" : "md:col-span-2"}>
+                      <PromptSection
+                        category={cat}
+                        isSelected={isSelected}
+                        toggleOption={toggleOption}
+                        selectedCount={(selections[cat.id] || []).length}
+                      />
+                    </div>
+                  ))}
+                </div>
 
                 {/* Example Combos */}
                 <div className="border border-border rounded-xl bg-card p-4">
