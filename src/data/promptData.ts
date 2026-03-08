@@ -63,11 +63,11 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     subcategories: [
       {
         label: "Framing",
-        options: ["Extreme close-up", "Close-up", "Medium close-up", "Medium shot", "Full shot", "Wide shot", "Extreme wide shot"],
+        options: ["Extreme close-up", "Close-up", "Medium close-up", "Medium shot", "Full shot", "Wide shot", "Extreme wide shot", "Asymmetrical shot", "Symmetrical shot", "Two shot"],
       },
       {
         label: "Angle",
-        options: ["Eye-level", "Low angle", "High angle", "Dutch angle", "Bird's eye view", "Worm's eye view", "Over-the-shoulder", "POV shot"],
+        options: ["Eye-level", "Low angle", "High angle", "Dutch angle", "Bird's eye view", "Worm's eye view", "Over-the-shoulder", "POV shot", "Underwater shot", "Mirror shot", "Through-the-object shot"],
       },
       {
         label: "Lens",
@@ -147,6 +147,12 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
       "Chiaroscuro",
       "Dappled light through trees",
       "Fluorescent overhead",
+      "Moody lighting",
+      "Blue accent tone",
+      "Red accent tone",
+      "Natural lighting",
+      "Black and white",
+      "Autochrome",
     ],
   },
   {
