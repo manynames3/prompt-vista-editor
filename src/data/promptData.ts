@@ -7,6 +7,7 @@ export interface PromptCategory {
   subcategories?: { label: string; options: string[] }[];
   optional?: boolean;
   platformOnly?: "nanobanana" | "kling";
+  halfWidth?: boolean;
 }
 
 export const PROMPT_CATEGORIES: PromptCategory[] = [
@@ -109,6 +110,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Time & Weather",
     step: 5,
     color: "primary",
+    halfWidth: true,
     options: [],
     subcategories: [
       {
@@ -130,6 +132,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Lighting",
     step: 6,
     color: "accent",
+    halfWidth: true,
     options: [
       "Cinematic lighting",
       "Golden hour glow",
@@ -193,6 +196,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Mood & Emotion",
     step: 8,
     color: "accent",
+    halfWidth: true,
     options: [
       "Tense", "Peaceful", "Euphoric", "Melancholic", "Mysterious",
       "Heroic", "Romantic", "Nostalgic", "Ominous", "Whimsical",
@@ -204,6 +208,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Color Palette",
     step: 9,
     color: "primary",
+    halfWidth: true,
     options: [],
     subcategories: [
       {
@@ -261,6 +266,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     step: 12,
     color: "accent",
     optional: true,
+    halfWidth: true,
     options: ["Very slow / subtle motion", "Slow gentle motion", "Normal speed", "Fast dynamic motion", "Slow-motion 120fps", "Time-lapse", "Freeze frame moment", "Speed ramping"],
   },
   {
@@ -269,6 +275,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     step: 13,
     color: "primary",
     optional: true,
+    halfWidth: true,
     options: ["slow", "subtle", "smooth", "cinematic", "dramatic", "gentle", "floating", "handheld", "controlled", "steady", "dynamic", "fast", "elegant", "raw", "polished", "organic"],
   },
   {
@@ -277,6 +284,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     step: 14,
     color: "accent",
     optional: true,
+    halfWidth: true,
     options: ["16:9 widescreen", "9:16 vertical / TikTok", "1:1 square", "4:3 classic", "21:9 ultrawide / cinematic", "4:5 Instagram portrait", "2.39:1 anamorphic"],
   },
   {
@@ -308,6 +316,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     step: 16,
     color: "accent",
     optional: true,
+    halfWidth: true,
     options: [
       "No morphing artifacts",
       "No face distortion",
