@@ -208,6 +208,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Color Palette",
     step: 9,
     color: "primary",
+    halfWidth: true,
     options: [],
     subcategories: [
       {
