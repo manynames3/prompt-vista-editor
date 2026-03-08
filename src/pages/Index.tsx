@@ -41,7 +41,9 @@ const Index = () => {
         <div className="flex gap-6">
           {/* Left: Categories */}
           <div className="flex-1 min-w-0 space-y-3">
-            {PROMPT_CATEGORIES.map((cat) => (
+            {PROMPT_CATEGORIES
+              .filter((cat) => !cat.platformOnly || cat.platformOnly === platform)
+              .map((cat) => (
               <PromptSection
                 key={cat.id}
                 category={cat}
