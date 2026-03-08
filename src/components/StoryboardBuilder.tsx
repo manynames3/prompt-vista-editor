@@ -19,6 +19,7 @@ import {
   type StoryboardTemplate,
   type StoryboardScene,
 } from "@/data/storyboardTemplates";
+import { StoryboardTimeline } from "@/components/StoryboardTimeline";
 
 function generateId() {
   return Math.random().toString(36).slice(2, 10);
