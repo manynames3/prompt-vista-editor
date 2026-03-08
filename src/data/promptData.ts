@@ -16,6 +16,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Subject",
     step: 1,
     color: "primary",
+    halfWidth: true,
     options: [
       "Woman walking through a city",
       "Man dancing in a studio",
@@ -27,11 +28,6 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
       "Animal in nature",
       "Group of people",
       "Solitary figure",
-      "Golden retriever with wet fur",
-      "Vintage car on a highway",
-      "Dancer mid-leap",
-      "Chef preparing food",
-      "Astronaut floating in space",
     ],
   },
   {
@@ -39,20 +35,11 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Action",
     step: 2,
     color: "accent",
-    options: [],
-    subcategories: [
-      {
-        label: "Movement",
-        options: ["Walking slowly", "Running fast", "Dancing", "Jumping", "Falling", "Rising up", "Climbing", "Crawling", "Floating", "Spinning"],
-      },
-      {
-        label: "Expression",
-        options: ["Looking around", "Gesturing", "Standing still", "Turning around", "Laughing", "Crying", "Whispering", "Shouting"],
-      },
-      {
-        label: "Interaction",
-        options: ["Interacting with objects", "Reaching out", "Pouring liquid", "Typing rapidly", "Fighting", "Embracing", "Throwing", "Catching"],
-      },
+    halfWidth: true,
+    options: [
+      "Walking slowly", "Running fast", "Dancing", "Jumping",
+      "Falling", "Rising up", "Turning around", "Looking around",
+      "Gesturing", "Standing still", "Interacting with objects", "Climbing",
     ],
   },
   {
