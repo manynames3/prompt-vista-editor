@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   Plus,
   Trash2,
@@ -11,6 +11,10 @@ import {
   GripVertical,
   Sparkles,
   Clock,
+  ArrowUp,
+  ArrowDown,
+  CopyPlus,
+  StickyNote,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -20,6 +24,7 @@ import {
   type StoryboardScene,
 } from "@/data/storyboardTemplates";
 import { StoryboardTimeline } from "@/components/StoryboardTimeline";
+import { SceneChipPicker } from "@/components/SceneChipPicker";
 
 function generateId() {
   return Math.random().toString(36).slice(2, 10);
@@ -32,6 +37,7 @@ const EMPTY_SCENE: () => StoryboardScene = () => ({
   endFrame: "",
   motion: "",
   duration: "4s",
+  notes: "",
 });
 
 export function StoryboardBuilder() {
@@ -40,6 +46,7 @@ export function StoryboardBuilder() {
     new Set([scenes[0].id])
   );
   const [templateExpanded, setTemplateExpanded] = useState(true);
+  const [activeField, setActiveField] = useState<{ sceneId: string; field: "startFrame" | "endFrame" | "motion" } | null>(null);
 
   const toggleExpand = (id: string) => {
     setExpandedScenes((prev) => {
@@ -64,6 +71,30 @@ export function StoryboardBuilder() {
     });
   }, []);
 
+  const duplicateScene = useCallback((id: string) => {
+    setScenes((prev) => {
+      const idx = prev.findIndex((s) => s.id === id);
+      if (idx === -1) return prev;
+      const clone = { ...prev[idx], id: generateId(), title: `${prev[idx].title} (copy)` };
+      const next = [...prev];
+      next.splice(idx + 1, 0, clone);
+      return next;
+    });
+    toast.success("Scene duplicated");
+  }, []);
+
+  const moveScene = useCallback((id: string, direction: "up" | "down") => {
+    setScenes((prev) => {
+      const idx = prev.findIndex((s) => s.id === id);
+      if (idx === -1) return prev;
+      const targetIdx = direction === "up" ? idx - 1 : idx + 1;
+      if (targetIdx < 0 || targetIdx >= prev.length) return prev;
+      const next = [...prev];
+      [next[idx], next[targetIdx]] = [next[targetIdx], next[idx]];
+      return next;
+    });
+  }, []);
+
   const updateScene = useCallback(
     (id: string, field: keyof StoryboardScene, value: string) => {
       setScenes((prev) =>
@@ -73,10 +104,26 @@ export function StoryboardBuilder() {
     []
   );
 
+  const insertChipToField = useCallback((text: string) => {
+    if (!activeField) {
+      toast.error("Click on a prompt field first, then pick a chip");
+      return;
+    }
+    setScenes((prev) =>
+      prev.map((s) => {
+        if (s.id !== activeField.sceneId) return s;
+        const current = s[activeField.field];
+        const separator = current ? ", " : "";
+        return { ...s, [activeField.field]: current + separator + text };
+      })
+    );
+  }, [activeField]);
+
   const loadTemplate = useCallback((template: StoryboardTemplate) => {
     const loaded = template.scenes.map((s) => ({
       ...s,
       id: generateId(),
+      notes: "",
     }));
     setScenes(loaded);
     setExpandedScenes(new Set(loaded.map((s) => s.id)));
@@ -97,6 +144,7 @@ export function StoryboardBuilder() {
           "",
           `🎬 MOTION PROMPT (Kling):`,
           s.motion || "(empty)",
+          ...(s.notes ? ["", `📝 NOTES:`, s.notes] : []),
         ];
         return parts.join("\n");
       })
@@ -239,8 +287,35 @@ export function StoryboardBuilder() {
                       {[scene.startFrame, scene.endFrame, scene.motion].filter(Boolean).length}/3
                     </span>
                   )}
+                  {scene.notes && (
+                    <StickyNote className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                  )}
                 </div>
-                <div className="flex items-center gap-1 shrink-0">
+                <div className="flex items-center gap-0.5 shrink-0">
+                  {/* Move up/down */}
+                  <span
+                    role="button"
+                    onClick={(e) => { e.stopPropagation(); moveScene(scene.id, "up"); }}
+                    className={cn("p-1.5 rounded-md transition-colors", index === 0 ? "opacity-30 pointer-events-none" : "hover:bg-secondary")}
+                  >
+                    <ArrowUp className="w-3.5 h-3.5 text-muted-foreground" />
+                  </span>
+                  <span
+                    role="button"
+                    onClick={(e) => { e.stopPropagation(); moveScene(scene.id, "down"); }}
+                    className={cn("p-1.5 rounded-md transition-colors", index === scenes.length - 1 ? "opacity-30 pointer-events-none" : "hover:bg-secondary")}
+                  >
+                    <ArrowDown className="w-3.5 h-3.5 text-muted-foreground" />
+                  </span>
+                  {/* Duplicate */}
+                  <span
+                    role="button"
+                    onClick={(e) => { e.stopPropagation(); duplicateScene(scene.id); }}
+                    className="p-1.5 rounded-md hover:bg-secondary transition-colors"
+                    title="Duplicate scene"
+                  >
+                    <CopyPlus className="w-3.5 h-3.5 text-muted-foreground" />
+                  </span>
                   {scenes.length > 1 && (
                     <span
                       role="button"
@@ -287,6 +362,20 @@ export function StoryboardBuilder() {
                     />
                   </div>
 
+                  {/* Chip picker */}
+                  <SceneChipPicker
+                    onInsert={(text) => {
+                      if (activeField && activeField.sceneId === scene.id) {
+                        insertChipToField(text);
+                      } else {
+                        // Default to startFrame if no field selected for this scene
+                        const current = scene.startFrame;
+                        const separator = current ? ", " : "";
+                        updateScene(scene.id, "startFrame", current + separator + text);
+                      }
+                    }}
+                  />
+
                   {/* Start Frame */}
                   <PromptField
                     icon={<Image className="w-3.5 h-3.5 text-primary" />}
@@ -296,6 +385,8 @@ export function StoryboardBuilder() {
                     value={scene.startFrame}
                     onChange={(v) => updateScene(scene.id, "startFrame", v)}
                     onCopy={() => copyField("Start frame", scene.startFrame)}
+                    onFocus={() => setActiveField({ sceneId: scene.id, field: "startFrame" })}
+                    isActive={activeField?.sceneId === scene.id && activeField?.field === "startFrame"}
                     placeholder="Describe the starting image — composition, subject, lighting, style, mood..."
                   />
 
@@ -308,6 +399,8 @@ export function StoryboardBuilder() {
                     value={scene.endFrame}
                     onChange={(v) => updateScene(scene.id, "endFrame", v)}
                     onCopy={() => copyField("End frame", scene.endFrame)}
+                    onFocus={() => setActiveField({ sceneId: scene.id, field: "endFrame" })}
+                    isActive={activeField?.sceneId === scene.id && activeField?.field === "endFrame"}
                     placeholder="Describe the ending image — what changed from the start frame..."
                   />
 
@@ -320,8 +413,26 @@ export function StoryboardBuilder() {
                     value={scene.motion}
                     onChange={(v) => updateScene(scene.id, "motion", v)}
                     onCopy={() => copyField("Motion prompt", scene.motion)}
+                    onFocus={() => setActiveField({ sceneId: scene.id, field: "motion" })}
+                    isActive={activeField?.sceneId === scene.id && activeField?.field === "motion"}
                     placeholder="Camera movement, transition style, speed, mood for the video between frames..."
                   />
+
+                  {/* Director Notes */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <StickyNote className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="text-xs font-semibold text-foreground">Director Notes</span>
+                      <span className="text-[10px] text-muted-foreground">(optional)</span>
+                    </div>
+                    <textarea
+                      value={scene.notes}
+                      onChange={(e) => updateScene(scene.id, "notes", e.target.value)}
+                      placeholder="Reference links, reminders, shot context, music cues..."
+                      rows={2}
+                      className="w-full bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border border-border focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground leading-relaxed resize-none scrollbar-thin"
+                    />
+                  </div>
                 </div>
               )}
             </div>
@@ -361,6 +472,8 @@ function PromptField({
   value,
   onChange,
   onCopy,
+  onFocus,
+  isActive,
   placeholder,
 }: {
   icon: React.ReactNode;
@@ -370,6 +483,8 @@ function PromptField({
   value: string;
   onChange: (v: string) => void;
   onCopy: () => void;
+  onFocus: () => void;
+  isActive: boolean;
   placeholder: string;
 }) {
   return (
@@ -388,6 +503,11 @@ function PromptField({
           >
             {sublabel}
           </span>
+          {isActive && (
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
+              ← chips insert here
+            </span>
+          )}
         </div>
         {value && (
           <button
@@ -402,9 +522,13 @@ function PromptField({
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onFocus={onFocus}
         placeholder={placeholder}
         rows={3}
-        className="w-full bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border border-border focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground font-mono leading-relaxed resize-none scrollbar-thin"
+        className={cn(
+          "w-full bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border focus:outline-none transition-colors placeholder:text-muted-foreground font-mono leading-relaxed resize-none scrollbar-thin",
+          isActive ? "border-primary ring-1 ring-primary/20" : "border-border focus:border-primary"
+        )}
       />
     </div>
   );
