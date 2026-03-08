@@ -84,6 +84,9 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
       "Busy street market", "Victorian library",
       "Tropical jungle", "Industrial loft",
       "Post-apocalyptic ruins", "Floating islands",
+      "Crystal cavern", "Scandinavian apartment",
+      "Underground subway station", "Alien planet surface",
+      "Modern office building", "Worm's eye view alley",
     ],
   },
   {
