@@ -9,6 +9,7 @@ export interface StoryboardTemplate {
     endFrame: string;
     motion: string;
     duration: string;
+    transition?: string;
   }[];
 }
 
