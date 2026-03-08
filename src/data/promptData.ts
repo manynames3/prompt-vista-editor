@@ -7,6 +7,7 @@ export interface PromptCategory {
   subcategories?: { label: string; options: string[] }[];
   optional?: boolean;
   platformOnly?: "nanobanana" | "kling";
+  halfWidth?: boolean;
 }
 
 export const PROMPT_CATEGORIES: PromptCategory[] = [
