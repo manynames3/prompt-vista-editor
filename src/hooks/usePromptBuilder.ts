@@ -5,6 +5,7 @@ export type Selections = Record<string, string[]>;
 export function usePromptBuilder() {
   const [selections, setSelections] = useState<Selections>({});
   const [platform, setPlatform] = useState<"nanobanana" | "kling">("nanobanana");
+  const [customPrompt, setCustomPrompt] = useState("");
 
   const toggleOption = useCallback((categoryId: string, option: string) => {
     setSelections((prev) => {
@@ -26,23 +27,39 @@ export function usePromptBuilder() {
   );
 
   const assembledPrompt = useCallback(() => {
-    const order = ["subject", "action", "setting", "lighting", "camera", "modifiers", "style"];
+    if (customPrompt) return customPrompt;
+    const order = [
+      "subject", "action", "shot", "setting", "timeweather",
+      "lighting", "camera", "mood", "colorpalette", "style",
+      "filmstock", "motion", "modifiers", "aspectratio", "audio", "negative",
+    ];
     const parts: string[] = [];
     for (const key of order) {
       const vals = selections[key];
       if (vals && vals.length > 0) {
-        parts.push(vals.join(", "));
+        if (key === "negative") {
+          parts.push("Avoid: " + vals.join(", "));
+        } else {
+          parts.push(vals.join(", "));
+        }
       }
     }
     return parts.join(". ") + (parts.length ? "." : "");
-  }, [selections]);
+  }, [selections, customPrompt]);
 
-  const reset = useCallback(() => setSelections({}), []);
+  const reset = useCallback(() => {
+    setSelections({});
+    setCustomPrompt("");
+  }, []);
 
-  const selectionCount = Object.values(selections).reduce(
-    (sum, arr) => sum + arr.length,
-    0
-  );
+  const applyNichePrompt = useCallback((prompt: string) => {
+    setSelections({});
+    setCustomPrompt(prompt);
+  }, []);
+
+  const selectionCount = customPrompt
+    ? 1
+    : Object.values(selections).reduce((sum, arr) => sum + arr.length, 0);
 
   return {
     selections,
@@ -53,5 +70,8 @@ export function usePromptBuilder() {
     assembledPrompt,
     reset,
     selectionCount,
+    customPrompt,
+    setCustomPrompt,
+    applyNichePrompt,
   };
 }
