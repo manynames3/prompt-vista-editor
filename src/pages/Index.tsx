@@ -5,10 +5,11 @@ import { usePromptBuilder } from "@/hooks/usePromptBuilder";
 import { PromptSection } from "@/components/PromptSection";
 import { AssembledPrompt } from "@/components/AssembledPrompt";
 import { NicheCard } from "@/components/NicheCard";
-import { Zap, Layers, Blocks } from "lucide-react";
+import { StoryboardBuilder } from "@/components/StoryboardBuilder";
+import { Zap, Layers, Blocks, Clapperboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type TabId = "builder" | "specialty";
+type TabId = "builder" | "specialty" | "storyboard";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<TabId>("builder");
@@ -60,6 +61,18 @@ const Index = () => {
               Builder
             </button>
             <button
+              onClick={() => setActiveTab("storyboard")}
+              className={cn(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all",
+                activeTab === "storyboard"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Clapperboard className="w-3.5 h-3.5" />
+              Storyboard
+            </button>
+            <button
               onClick={() => setActiveTab("specialty")}
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all",
@@ -69,7 +82,7 @@ const Index = () => {
               )}
             >
               <Layers className="w-3.5 h-3.5" />
-              Specialty Niches
+              Niches
             </button>
           </div>
         </div>
@@ -128,6 +141,8 @@ const Index = () => {
                   </div>
                 </div>
               </>
+            ) : activeTab === "storyboard" ? (
+              <StoryboardBuilder />
             ) : (
               <>
                 <div className="mb-2">
