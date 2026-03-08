@@ -214,7 +214,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     subcategories: [
       {
         label: "Aesthetic",
-        options: ["Photorealistic", "Cinematic", "Animated", "Stylized", "Noir", "Surreal", "Dreamy", "Minimalist", "Vibrant", "Gritty", "Ethereal", "Retro"],
+        options: ["Photorealistic", "Cinematic", "Animated", "Stylized", "Noir", "Surreal", "Dreamy", "Minimalist", "Vibrant", "Gritty", "Ethereal", "Retro", "1980s Dark Fantasy", "Claymation", "Synthwave/Retrowave", "Weirdcore", "Studio Ghibli style", "Pixar 3D style"],
       },
       {
         label: "Film / Photography",
@@ -237,6 +237,10 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
       {
         label: "Camera / Rig",
         options: ["Shot on Arri Alexa", "Shot on RED", "Shot on Hasselblad", "Shot on 16mm film", "Shot on Super 8", "iPhone footage", "GoPro mounted", "Drone footage"],
+      },
+      {
+        label: "Format & Vibe",
+        options: ["Bodycam footage", "CCTV security camera", "Dashcam footage", "VHS aesthetic", "1990s camcorder", "Liminal space", "Smartphone vertical leak"],
       },
       {
         label: "Post-Processing",
@@ -263,10 +267,19 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     options: ["slow", "subtle", "smooth", "cinematic", "dramatic", "gentle", "floating", "handheld", "controlled", "steady", "dynamic", "fast", "elegant", "raw", "polished", "organic"],
   },
   {
-    id: "aspectratio",
-    label: "Aspect Ratio",
+    id: "render",
+    label: "Render & Quality",
     step: 14,
     color: "accent",
+    optional: true,
+    halfWidth: true,
+    options: ["Unreal Engine 5", "Octane Render", "8k resolution", "Masterpiece", "Trending on ArtStation", "Highly detailed", "CGI", "Ray tracing", "Hyper-realistic"],
+  },
+  {
+    id: "aspectratio",
+    label: "Aspect Ratio",
+    step: 15,
+    color: "primary",
     optional: true,
     halfWidth: true,
     options: ["16:9 widescreen", "9:16 vertical / TikTok", "1:1 square", "4:3 classic", "21:9 ultrawide / cinematic", "4:5 Instagram portrait", "2.39:1 anamorphic"],
@@ -274,8 +287,8 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
   {
     id: "audio",
     label: "Audio & Sound",
-    step: 15,
-    color: "primary",
+    step: 16,
+    color: "accent",
     optional: true,
     platformOnly: "kling",
     options: [],
@@ -297,8 +310,8 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
   {
     id: "negative",
     label: "Negative Prompt",
-    step: 16,
-    color: "accent",
+    step: 17,
+    color: "primary",
     optional: true,
     halfWidth: true,
     options: [
