@@ -37,11 +37,11 @@ const Index = () => {
               <Zap className="w-4 h-4 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-foreground leading-none">
-                Prompt Builder
+             <h1 className="text-lg font-bold text-foreground leading-none">
+                PromptBoard
               </h1>
               <p className="text-xs text-muted-foreground">
-                AI video prompts for Nano Banana & Kling
+                AI video prompts & storyboards for Nano Banana & Kling
               </p>
             </div>
           </div>
