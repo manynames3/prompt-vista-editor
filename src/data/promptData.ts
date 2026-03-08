@@ -316,6 +316,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     step: 16,
     color: "accent",
     optional: true,
+    halfWidth: true,
     options: [
       "No morphing artifacts",
       "No face distortion",
