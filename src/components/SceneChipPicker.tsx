@@ -102,15 +102,19 @@ const SCENE_CHIP_CATEGORIES = [
   },
   {
     id: "style",
-    label: "Style",
+    label: "Style & Quality",
     groups: [
       {
         label: "Look",
-        options: ["Photorealistic", "Cinematic", "Noir", "Surreal", "Dreamy", "Minimalist", "Gritty", "Retro"],
+        options: ["Photorealistic", "Cinematic", "1980s Dark Fantasy", "Synthwave/Retrowave", "Claymation", "Studio Ghibli style", "Noir", "Surreal", "Dreamy", "Minimalist"],
       },
       {
-        label: "Technical",
-        options: ["Shot on Arri Alexa", "Kodak Portra 400", "Film grain", "Cinematic color grading", "Anamorphic lens", "16mm film"],
+        label: "Format & Tech",
+        options: ["Shot on Arri Alexa", "Bodycam footage", "CCTV security camera", "VHS aesthetic", "Kodak Portra 400", "Film grain", "Cinematic color grading", "16mm film"],
+      },
+      {
+        label: "Render & Quality",
+        options: ["Unreal Engine 5", "8k resolution", "Masterpiece", "Highly detailed", "Trending on ArtStation", "Octane Render", "Ray tracing"],
       },
     ],
   },

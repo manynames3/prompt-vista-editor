@@ -31,7 +31,7 @@ export function usePromptBuilder() {
     const order = [
       "subject", "action", "shot", "setting", "timeweather",
       "lighting", "camera", "mood", "colorpalette", "style",
-      "filmstock", "motion", "modifiers", "aspectratio", "audio", "negative",
+      "filmstock", "motion", "modifiers", "render", "aspectratio", "audio", "negative",
     ];
     const parts: string[] = [];
     for (const key of order) {
