@@ -570,6 +570,7 @@ function PromptField({
   onFocus,
   isActive,
   placeholder,
+  rows = 3,
 }: {
   icon: React.ReactNode;
   label: string;
@@ -581,9 +582,10 @@ function PromptField({
   onFocus: () => void;
   isActive: boolean;
   placeholder: string;
+  rows?: number;
 }) {
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           {icon}
@@ -600,7 +602,7 @@ function PromptField({
           </span>
           {isActive && (
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
-              ← chips insert here
+              ← chips here
             </span>
           )}
         </div>
@@ -610,7 +612,6 @@ function PromptField({
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <Copy className="w-3 h-3" />
-            Copy
           </button>
         )}
       </div>
@@ -619,7 +620,7 @@ function PromptField({
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
         placeholder={placeholder}
-        rows={3}
+        rows={rows}
         className={cn(
           "w-full bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border focus:outline-none transition-colors placeholder:text-muted-foreground font-mono leading-relaxed resize-none scrollbar-thin",
           isActive ? "border-primary ring-1 ring-primary/20" : "border-border focus:border-primary"
