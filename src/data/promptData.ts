@@ -72,24 +72,14 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Setting",
     step: 4,
     color: "accent",
-    options: [],
-    subcategories: [
-      {
-        label: "Urban",
-        options: ["Cyberpunk city at night", "Modern office building", "Neon-lit Tokyo alley", "Rooftop overlooking skyline", "Busy street market", "Underground subway station"],
-      },
-      {
-        label: "Nature",
-        options: ["Lush forest with golden sunlight", "Beach at sunset", "Desert landscape", "Underwater environment", "Snowy mountain peak", "Misty valley", "Tropical jungle"],
-      },
-      {
-        label: "Interior",
-        options: ["Minimalist white studio", "Abandoned warehouse", "Scandinavian apartment", "Victorian library", "Industrial loft", "Cozy café"],
-      },
-      {
-        label: "Fantasy/Sci-Fi",
-        options: ["Futuristic space station", "Ancient temple", "Floating islands", "Post-apocalyptic ruins", "Crystal cavern", "Alien planet surface"],
-      },
+    halfWidth: true,
+    options: [
+      "Cyberpunk city at night", "Lush forest with golden sunlight",
+      "Beach at sunset", "Minimalist white studio",
+      "Abandoned warehouse", "Desert landscape",
+      "Neon-lit Tokyo alley", "Snowy mountain peak",
+      "Futuristic space station", "Cozy café",
+      "Ancient temple", "Rooftop overlooking skyline",
     ],
   },
   {
