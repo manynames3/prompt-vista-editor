@@ -19,6 +19,7 @@ import {
   type StoryboardTemplate,
   type StoryboardScene,
 } from "@/data/storyboardTemplates";
+import { StoryboardTimeline } from "@/components/StoryboardTimeline";
 
 function generateId() {
   return Math.random().toString(36).slice(2, 10);
@@ -193,6 +194,17 @@ export function StoryboardBuilder() {
           </div>
         )}
       </div>
+
+      {/* Timeline */}
+      {scenes.length > 0 && (
+        <StoryboardTimeline
+          scenes={scenes}
+          activeSceneId={[...expandedScenes][0]}
+          onSceneClick={(id) => {
+            setExpandedScenes(new Set([id]));
+          }}
+        />
+      )}
 
       {/* Scenes */}
       <div className="space-y-2">
