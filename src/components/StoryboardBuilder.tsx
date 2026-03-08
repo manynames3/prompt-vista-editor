@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import {
   Plus,
   Trash2,
@@ -15,6 +15,9 @@ import {
   ArrowDown,
   CopyPlus,
   StickyNote,
+  ChevronsUpDown,
+  RotateCcw,
+  Shuffle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -37,8 +40,24 @@ const EMPTY_SCENE: () => StoryboardScene = () => ({
   endFrame: "",
   motion: "",
   duration: "4s",
+  transition: "",
   notes: "",
 });
+
+const DURATION_PRESETS = ["3s", "4s", "5s", "6s", "8s", "10s"];
+
+const TRANSITION_PRESETS = [
+  "Cut",
+  "Crossfade",
+  "Match cut",
+  "Jump cut",
+  "Whip pan transition",
+  "Fade to black",
+  "Fade from black",
+  "Morph transition",
+  "Zoom transition",
+  "Swipe",
+];
 
 export function StoryboardBuilder() {
   const [scenes, setScenes] = useState<StoryboardScene[]>([EMPTY_SCENE()]);
@@ -47,6 +66,16 @@ export function StoryboardBuilder() {
   );
   const [templateExpanded, setTemplateExpanded] = useState(true);
   const [activeField, setActiveField] = useState<{ sceneId: string; field: "startFrame" | "endFrame" | "motion" } | null>(null);
+
+  const allExpanded = expandedScenes.size === scenes.length;
+
+  const toggleExpandAll = () => {
+    if (allExpanded) {
+      setExpandedScenes(new Set());
+    } else {
+      setExpandedScenes(new Set(scenes.map((s) => s.id)));
+    }
+  };
 
   const toggleExpand = (id: string) => {
     setExpandedScenes((prev) => {
@@ -123,11 +152,20 @@ export function StoryboardBuilder() {
     const loaded = template.scenes.map((s) => ({
       ...s,
       id: generateId(),
+      transition: s.transition || "",
       notes: "",
     }));
     setScenes(loaded);
     setExpandedScenes(new Set(loaded.map((s) => s.id)));
     toast.success(`Loaded "${template.name}" storyboard`);
+  }, []);
+
+  const clearStoryboard = useCallback(() => {
+    const fresh = EMPTY_SCENE();
+    setScenes([fresh]);
+    setExpandedScenes(new Set([fresh.id]));
+    setActiveField(null);
+    toast.success("Storyboard cleared");
   }, []);
 
   const copyAllPrompts = useCallback(() => {
@@ -136,14 +174,15 @@ export function StoryboardBuilder() {
         const parts = [
           `=== SCENE ${i + 1}: ${s.title || "Untitled"} (${s.duration}) ===`,
           "",
-          `📸 START FRAME (Nano Banana):`,
+          `📸 START FRAME:`,
           s.startFrame || "(empty)",
           "",
-          `📸 END FRAME (Nano Banana):`,
+          `📸 END FRAME:`,
           s.endFrame || "(empty)",
           "",
-          `🎬 MOTION PROMPT (Kling):`,
+          `🎬 MOTION PROMPT:`,
           s.motion || "(empty)",
+          ...(s.transition ? ["", `↔️ TRANSITION: ${s.transition}`] : []),
           ...(s.notes ? ["", `📝 NOTES:`, s.notes] : []),
         ];
         return parts.join("\n");
@@ -166,17 +205,36 @@ export function StoryboardBuilder() {
   return (
     <div className="space-y-3">
       {/* Header */}
-      <div className="mb-1">
-        <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-          <Clapperboard className="w-5 h-5 text-primary" />
-          Storyboard Planner
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Plan your scenes shot-by-shot. Create start & end frame images in{" "}
-          <span className="text-primary font-medium">Nano Banana</span>, then
-          generate videos between them in{" "}
-          <span className="text-accent font-medium">Kling</span>.
-        </p>
+      <div className="flex items-start justify-between mb-1">
+        <div>
+          <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
+            <Clapperboard className="w-5 h-5 text-primary" />
+            Storyboard Planner
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Plan scenes shot-by-shot. Build start & end frames, then add motion prompts.
+          </p>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            onClick={toggleExpandAll}
+            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground px-2 py-1.5 rounded-md hover:bg-secondary transition-colors"
+            title={allExpanded ? "Collapse all" : "Expand all"}
+          >
+            <ChevronsUpDown className="w-3.5 h-3.5" />
+            {allExpanded ? "Collapse" : "Expand"}
+          </button>
+          {hasContent && (
+            <button
+              onClick={clearStoryboard}
+              className="flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive px-2 py-1.5 rounded-md hover:bg-destructive/10 transition-colors"
+              title="Clear storyboard"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Clear
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Workflow guide */}
@@ -190,9 +248,13 @@ export function StoryboardBuilder() {
         </span>
         <ArrowRight className="w-3 h-3 shrink-0" />
         <span className="flex items-center gap-1 shrink-0 text-accent font-medium">
-          <Film className="w-3.5 h-3.5" /> Kling Video
+          <Film className="w-3.5 h-3.5" /> Motion Video
         </span>
-        <span className="ml-1 shrink-0 opacity-60">→ repeat per scene</span>
+        <ArrowRight className="w-3 h-3 shrink-0" />
+        <span className="flex items-center gap-1 shrink-0 text-muted-foreground font-medium">
+          <Shuffle className="w-3.5 h-3.5" /> Transition
+        </span>
+        <span className="ml-1 shrink-0 opacity-60">→ repeat</span>
       </div>
 
       {/* Templates */}
@@ -292,7 +354,6 @@ export function StoryboardBuilder() {
                   )}
                 </div>
                 <div className="flex items-center gap-0.5 shrink-0">
-                  {/* Move up/down */}
                   <span
                     role="button"
                     onClick={(e) => { e.stopPropagation(); moveScene(scene.id, "up"); }}
@@ -307,7 +368,6 @@ export function StoryboardBuilder() {
                   >
                     <ArrowDown className="w-3.5 h-3.5 text-muted-foreground" />
                   </span>
-                  {/* Duplicate */}
                   <span
                     role="button"
                     onClick={(e) => { e.stopPropagation(); duplicateScene(scene.id); }}
@@ -351,15 +411,23 @@ export function StoryboardBuilder() {
                       }
                       className="flex-1 bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border border-border focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
                     />
-                    <input
-                      type="text"
-                      placeholder="4s"
-                      value={scene.duration}
-                      onChange={(e) =>
-                        updateScene(scene.id, "duration", e.target.value)
-                      }
-                      className="w-16 bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border border-border focus:border-primary focus:outline-none text-center transition-colors placeholder:text-muted-foreground"
-                    />
+                    {/* Duration presets */}
+                    <div className="flex items-center gap-1">
+                      {DURATION_PRESETS.map((d) => (
+                        <button
+                          key={d}
+                          onClick={() => updateScene(scene.id, "duration", d)}
+                          className={cn(
+                            "px-2 py-1.5 rounded-md text-[11px] font-mono font-medium transition-colors",
+                            scene.duration === d
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-secondary/50 text-muted-foreground hover:text-foreground hover:bg-secondary"
+                          )}
+                        >
+                          {d}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Chip picker */}
@@ -368,7 +436,6 @@ export function StoryboardBuilder() {
                       if (activeField && activeField.sceneId === scene.id) {
                         insertChipToField(text);
                       } else {
-                        // Default to startFrame if no field selected for this scene
                         const current = scene.startFrame;
                         const separator = current ? ", " : "";
                         updateScene(scene.id, "startFrame", current + separator + text);
@@ -380,43 +447,68 @@ export function StoryboardBuilder() {
                   <PromptField
                     icon={<Image className="w-3.5 h-3.5 text-primary" />}
                     label="Start Frame"
-                    sublabel="Nano Banana"
+                    sublabel="Image prompt"
                     color="primary"
                     value={scene.startFrame}
                     onChange={(v) => updateScene(scene.id, "startFrame", v)}
                     onCopy={() => copyField("Start frame", scene.startFrame)}
                     onFocus={() => setActiveField({ sceneId: scene.id, field: "startFrame" })}
                     isActive={activeField?.sceneId === scene.id && activeField?.field === "startFrame"}
-                    placeholder="Describe the starting image — composition, subject, lighting, style, mood..."
+                    placeholder="Describe the starting image — subject, composition, shot type, lighting, style..."
                   />
 
                   {/* End Frame */}
                   <PromptField
                     icon={<Image className="w-3.5 h-3.5 text-primary" />}
                     label="End Frame"
-                    sublabel="Nano Banana"
+                    sublabel="Image prompt"
                     color="primary"
                     value={scene.endFrame}
                     onChange={(v) => updateScene(scene.id, "endFrame", v)}
                     onCopy={() => copyField("End frame", scene.endFrame)}
                     onFocus={() => setActiveField({ sceneId: scene.id, field: "endFrame" })}
                     isActive={activeField?.sceneId === scene.id && activeField?.field === "endFrame"}
-                    placeholder="Describe the ending image — what changed from the start frame..."
+                    placeholder="Describe the ending image — what changed from start frame..."
                   />
 
                   {/* Motion / Video */}
                   <PromptField
                     icon={<Film className="w-3.5 h-3.5 text-accent" />}
                     label="Motion Prompt"
-                    sublabel="Kling"
+                    sublabel="Video prompt"
                     color="accent"
                     value={scene.motion}
                     onChange={(v) => updateScene(scene.id, "motion", v)}
                     onCopy={() => copyField("Motion prompt", scene.motion)}
                     onFocus={() => setActiveField({ sceneId: scene.id, field: "motion" })}
                     isActive={activeField?.sceneId === scene.id && activeField?.field === "motion"}
-                    placeholder="Camera movement, transition style, speed, mood for the video between frames..."
+                    placeholder="Camera movement, speed, mood for the video between frames..."
                   />
+
+                  {/* Transition */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <Shuffle className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="text-xs font-semibold text-foreground">Transition to Next Scene</span>
+                      <span className="text-[10px] text-muted-foreground">(optional)</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {TRANSITION_PRESETS.map((t) => (
+                        <button
+                          key={t}
+                          onClick={() => updateScene(scene.id, "transition", scene.transition === t ? "" : t)}
+                          className={cn(
+                            "px-2 py-0.5 rounded-full text-[11px] font-medium transition-colors border",
+                            scene.transition === t
+                              ? "bg-primary/20 text-primary border-primary/30"
+                              : "bg-secondary/60 text-muted-foreground hover:text-foreground border-transparent hover:border-border"
+                          )}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
                   {/* Director Notes */}
                   <div className="space-y-1.5">
