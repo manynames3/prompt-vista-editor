@@ -399,7 +399,7 @@ export function StoryboardBuilder() {
 
               {/* Scene body */}
               {isExpanded && (
-                <div className="px-4 pb-4 space-y-3">
+                <div className="px-4 pb-4 space-y-2.5">
                   {/* Title + Duration row */}
                   <div className="flex gap-2">
                     <input
@@ -411,7 +411,6 @@ export function StoryboardBuilder() {
                       }
                       className="flex-1 bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border border-border focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
                     />
-                    {/* Duration presets */}
                     <div className="flex items-center gap-1">
                       {DURATION_PRESETS.map((d) => (
                         <button
@@ -443,87 +442,91 @@ export function StoryboardBuilder() {
                     }}
                   />
 
-                  {/* Start Frame */}
-                  <PromptField
-                    icon={<Image className="w-3.5 h-3.5 text-primary" />}
-                    label="Start Frame"
-                    sublabel="Image prompt"
-                    color="primary"
-                    value={scene.startFrame}
-                    onChange={(v) => updateScene(scene.id, "startFrame", v)}
-                    onCopy={() => copyField("Start frame", scene.startFrame)}
-                    onFocus={() => setActiveField({ sceneId: scene.id, field: "startFrame" })}
-                    isActive={activeField?.sceneId === scene.id && activeField?.field === "startFrame"}
-                    placeholder="Describe the starting image — subject, composition, shot type, lighting, style..."
-                  />
-
-                  {/* End Frame */}
-                  <PromptField
-                    icon={<Image className="w-3.5 h-3.5 text-primary" />}
-                    label="End Frame"
-                    sublabel="Image prompt"
-                    color="primary"
-                    value={scene.endFrame}
-                    onChange={(v) => updateScene(scene.id, "endFrame", v)}
-                    onCopy={() => copyField("End frame", scene.endFrame)}
-                    onFocus={() => setActiveField({ sceneId: scene.id, field: "endFrame" })}
-                    isActive={activeField?.sceneId === scene.id && activeField?.field === "endFrame"}
-                    placeholder="Describe the ending image — what changed from start frame..."
-                  />
-
-                  {/* Motion / Video */}
-                  <PromptField
-                    icon={<Film className="w-3.5 h-3.5 text-accent" />}
-                    label="Motion Prompt"
-                    sublabel="Video prompt"
-                    color="accent"
-                    value={scene.motion}
-                    onChange={(v) => updateScene(scene.id, "motion", v)}
-                    onCopy={() => copyField("Motion prompt", scene.motion)}
-                    onFocus={() => setActiveField({ sceneId: scene.id, field: "motion" })}
-                    isActive={activeField?.sceneId === scene.id && activeField?.field === "motion"}
-                    placeholder="Camera movement, speed, mood for the video between frames..."
-                  />
-
-                  {/* Transition */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-1.5">
-                      <Shuffle className="w-3.5 h-3.5 text-muted-foreground" />
-                      <span className="text-xs font-semibold text-foreground">Transition to Next Scene</span>
-                      <span className="text-[10px] text-muted-foreground">(optional)</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {TRANSITION_PRESETS.map((t) => (
-                        <button
-                          key={t}
-                          onClick={() => updateScene(scene.id, "transition", scene.transition === t ? "" : t)}
-                          className={cn(
-                            "px-2 py-0.5 rounded-full text-[11px] font-medium transition-colors border",
-                            scene.transition === t
-                              ? "bg-primary/20 text-primary border-primary/30"
-                              : "bg-secondary/60 text-muted-foreground hover:text-foreground border-transparent hover:border-border"
-                          )}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
+                  {/* Start Frame + End Frame — side by side */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                    <PromptField
+                      icon={<Image className="w-3.5 h-3.5 text-primary" />}
+                      label="Start Frame"
+                      sublabel="Image"
+                      color="primary"
+                      value={scene.startFrame}
+                      onChange={(v) => updateScene(scene.id, "startFrame", v)}
+                      onCopy={() => copyField("Start frame", scene.startFrame)}
+                      onFocus={() => setActiveField({ sceneId: scene.id, field: "startFrame" })}
+                      isActive={activeField?.sceneId === scene.id && activeField?.field === "startFrame"}
+                      placeholder="Subject, composition, shot type, lighting, style..."
+                      rows={3}
+                    />
+                    <PromptField
+                      icon={<Image className="w-3.5 h-3.5 text-primary" />}
+                      label="End Frame"
+                      sublabel="Image"
+                      color="primary"
+                      value={scene.endFrame}
+                      onChange={(v) => updateScene(scene.id, "endFrame", v)}
+                      onCopy={() => copyField("End frame", scene.endFrame)}
+                      onFocus={() => setActiveField({ sceneId: scene.id, field: "endFrame" })}
+                      isActive={activeField?.sceneId === scene.id && activeField?.field === "endFrame"}
+                      placeholder="What changed from start — new position, expression, framing..."
+                      rows={3}
+                    />
                   </div>
 
-                  {/* Director Notes */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-1.5">
-                      <StickyNote className="w-3.5 h-3.5 text-muted-foreground" />
-                      <span className="text-xs font-semibold text-foreground">Director Notes</span>
-                      <span className="text-[10px] text-muted-foreground">(optional)</span>
-                    </div>
-                    <textarea
-                      value={scene.notes}
-                      onChange={(e) => updateScene(scene.id, "notes", e.target.value)}
-                      placeholder="Reference links, reminders, shot context, music cues..."
-                      rows={2}
-                      className="w-full bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border border-border focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground leading-relaxed resize-none scrollbar-thin"
+                  {/* Motion + Transition — side by side */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                    <PromptField
+                      icon={<Film className="w-3.5 h-3.5 text-accent" />}
+                      label="Motion Prompt"
+                      sublabel="Video"
+                      color="accent"
+                      value={scene.motion}
+                      onChange={(v) => updateScene(scene.id, "motion", v)}
+                      onCopy={() => copyField("Motion prompt", scene.motion)}
+                      onFocus={() => setActiveField({ sceneId: scene.id, field: "motion" })}
+                      isActive={activeField?.sceneId === scene.id && activeField?.field === "motion"}
+                      placeholder="Camera movement, speed, mood..."
+                      rows={3}
                     />
+
+                    {/* Transition + Notes stacked */}
+                    <div className="space-y-2.5">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1.5">
+                          <Shuffle className="w-3.5 h-3.5 text-muted-foreground" />
+                          <span className="text-xs font-semibold text-foreground">Transition</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {TRANSITION_PRESETS.map((t) => (
+                            <button
+                              key={t}
+                              onClick={() => updateScene(scene.id, "transition", scene.transition === t ? "" : t)}
+                              className={cn(
+                                "px-2 py-0.5 rounded-full text-[11px] font-medium transition-colors border",
+                                scene.transition === t
+                                  ? "bg-primary/20 text-primary border-primary/30"
+                                  : "bg-secondary/60 text-muted-foreground hover:text-foreground border-transparent hover:border-border"
+                              )}
+                            >
+                              {t}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1.5">
+                          <StickyNote className="w-3.5 h-3.5 text-muted-foreground" />
+                          <span className="text-xs font-semibold text-foreground">Notes</span>
+                        </div>
+                        <textarea
+                          value={scene.notes}
+                          onChange={(e) => updateScene(scene.id, "notes", e.target.value)}
+                          placeholder="References, music cues, context..."
+                          rows={2}
+                          className="w-full bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border border-border focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground leading-relaxed resize-none scrollbar-thin"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -567,6 +570,7 @@ function PromptField({
   onFocus,
   isActive,
   placeholder,
+  rows = 3,
 }: {
   icon: React.ReactNode;
   label: string;
@@ -578,9 +582,10 @@ function PromptField({
   onFocus: () => void;
   isActive: boolean;
   placeholder: string;
+  rows?: number;
 }) {
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           {icon}
@@ -597,7 +602,7 @@ function PromptField({
           </span>
           {isActive && (
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
-              ← chips insert here
+              ← chips here
             </span>
           )}
         </div>
@@ -607,7 +612,6 @@ function PromptField({
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <Copy className="w-3 h-3" />
-            Copy
           </button>
         )}
       </div>
@@ -616,7 +620,7 @@ function PromptField({
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
         placeholder={placeholder}
-        rows={3}
+        rows={rows}
         className={cn(
           "w-full bg-secondary/50 text-foreground text-sm rounded-lg px-3 py-2 border focus:outline-none transition-colors placeholder:text-muted-foreground font-mono leading-relaxed resize-none scrollbar-thin",
           isActive ? "border-primary ring-1 ring-primary/20" : "border-border focus:border-primary"
