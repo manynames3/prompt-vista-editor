@@ -80,6 +80,10 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
       "Neon-lit Tokyo alley", "Snowy mountain peak",
       "Futuristic space station", "Cozy café",
       "Ancient temple", "Rooftop overlooking skyline",
+      "Underwater environment", "Misty valley",
+      "Busy street market", "Victorian library",
+      "Tropical jungle", "Industrial loft",
+      "Post-apocalyptic ruins", "Floating islands",
     ],
   },
   {
