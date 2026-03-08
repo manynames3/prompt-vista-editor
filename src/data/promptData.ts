@@ -16,6 +16,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Subject",
     step: 1,
     color: "primary",
+    halfWidth: true,
     options: [
       "Woman walking through a city",
       "Man dancing in a studio",
@@ -27,11 +28,6 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
       "Animal in nature",
       "Group of people",
       "Solitary figure",
-      "Golden retriever with wet fur",
-      "Vintage car on a highway",
-      "Dancer mid-leap",
-      "Chef preparing food",
-      "Astronaut floating in space",
     ],
   },
   {
@@ -39,20 +35,11 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Action",
     step: 2,
     color: "accent",
-    options: [],
-    subcategories: [
-      {
-        label: "Movement",
-        options: ["Walking slowly", "Running fast", "Dancing", "Jumping", "Falling", "Rising up", "Climbing", "Crawling", "Floating", "Spinning"],
-      },
-      {
-        label: "Expression",
-        options: ["Looking around", "Gesturing", "Standing still", "Turning around", "Laughing", "Crying", "Whispering", "Shouting"],
-      },
-      {
-        label: "Interaction",
-        options: ["Interacting with objects", "Reaching out", "Pouring liquid", "Typing rapidly", "Fighting", "Embracing", "Throwing", "Catching"],
-      },
+    halfWidth: true,
+    options: [
+      "Walking slowly", "Running fast", "Dancing", "Jumping",
+      "Falling", "Rising up", "Turning around", "Looking around",
+      "Gesturing", "Standing still", "Interacting with objects", "Climbing",
     ],
   },
   {
@@ -85,24 +72,14 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     label: "Setting",
     step: 4,
     color: "accent",
-    options: [],
-    subcategories: [
-      {
-        label: "Urban",
-        options: ["Cyberpunk city at night", "Modern office building", "Neon-lit Tokyo alley", "Rooftop overlooking skyline", "Busy street market", "Underground subway station"],
-      },
-      {
-        label: "Nature",
-        options: ["Lush forest with golden sunlight", "Beach at sunset", "Desert landscape", "Underwater environment", "Snowy mountain peak", "Misty valley", "Tropical jungle"],
-      },
-      {
-        label: "Interior",
-        options: ["Minimalist white studio", "Abandoned warehouse", "Scandinavian apartment", "Victorian library", "Industrial loft", "Cozy café"],
-      },
-      {
-        label: "Fantasy/Sci-Fi",
-        options: ["Futuristic space station", "Ancient temple", "Floating islands", "Post-apocalyptic ruins", "Crystal cavern", "Alien planet surface"],
-      },
+    halfWidth: true,
+    options: [
+      "Cyberpunk city at night", "Lush forest with golden sunlight",
+      "Beach at sunset", "Minimalist white studio",
+      "Abandoned warehouse", "Desert landscape",
+      "Neon-lit Tokyo alley", "Snowy mountain peak",
+      "Futuristic space station", "Cozy café",
+      "Ancient temple", "Rooftop overlooking skyline",
     ],
   },
   {

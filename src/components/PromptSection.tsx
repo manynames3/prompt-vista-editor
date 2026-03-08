@@ -63,7 +63,7 @@ export function PromptSection({
                   <p className="text-xs text-muted-foreground font-medium mb-1.5 uppercase tracking-wider">
                     {sub.label}
                   </p>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
                     {sub.options.map((opt) => (
                       <Chip
                         key={opt}
@@ -77,7 +77,7 @@ export function PromptSection({
               ))}
             </div>
           ) : (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="grid grid-cols-2 gap-1.5">
               {category.options.map((opt) => (
                 <Chip
                   key={opt}

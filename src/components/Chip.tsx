@@ -11,8 +11,8 @@ export function Chip({ label, active, onClick }: ChipProps) {
     <button
       onClick={onClick}
       className={cn(
-        "px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 border",
-        "cursor-pointer select-none whitespace-nowrap",
+        "w-full px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 border",
+        "cursor-pointer select-none text-center truncate",
         active
           ? "bg-chip-active text-chip-active-foreground border-chip-active glow-primary"
           : "bg-chip text-secondary-foreground border-border hover:bg-chip-hover hover:border-muted-foreground/30"
