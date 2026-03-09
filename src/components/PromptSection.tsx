@@ -23,7 +23,7 @@ export function PromptSection({
     <div className="border border-border rounded-xl bg-card overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-4 py-3 hover:bg-secondary/50 transition-colors"
+        className="w-full flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 hover:bg-secondary/50 transition-colors"
       >
         <div className="flex items-center gap-3">
           <span
@@ -55,7 +55,7 @@ export function PromptSection({
       </button>
 
       {expanded && (
-        <div className="px-4 pb-4">
+        <div className="px-3 sm:px-4 pb-3 sm:pb-4">
           {category.subcategories ? (
             <div className="space-y-3">
               {category.subcategories.map((sub) => (

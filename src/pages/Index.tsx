@@ -88,10 +88,10 @@ const Index = () => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex gap-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+        <div className="flex gap-4 sm:gap-6">
           {/* Left: Content */}
-          <div className="flex-1 min-w-0 space-y-3">
+          <div className="flex-1 min-w-0 space-y-2 sm:space-y-3">
             {activeTab === "builder" ? (
               <>
                 {/* Custom prompt indicator */}
@@ -109,7 +109,7 @@ const Index = () => {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                   {PROMPT_CATEGORIES
                     .filter((cat) => !cat.platformOnly || cat.platformOnly === platform)
                     .map((cat) => (
